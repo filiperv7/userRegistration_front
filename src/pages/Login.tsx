@@ -1,5 +1,5 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import type { LoginDto } from '../types/UserTypes';
@@ -10,32 +10,41 @@ import { formatCPF } from '../utils/formatterCpf';
 export const Login: React.FC = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string>('');
-  const { setToken, setUser } = useAuthStore();
+  const { setToken, setUser, token } = useAuthStore();
+
+  useEffect(() => {
+    if (token) {
+      navigate('/users');
+    }
+  }, [token, navigate]);
 
   const validationSchema = Yup.object().shape({
     cpf: Yup.string()
-     .required('CPF é obrigatório')
-     .matches(
+      .required('CPF é obrigatório')
+      .matches(
         /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
         'CPF deve estar no formato 000.000.000-00'
       ),
     password: Yup.string()
-     .required('Senha é obrigatória')
-     .min(8, 'Senha deve ter no mínimo 8 caracteres, contendo minúsculo, maiúsculo, números e caracter especial'),
+      .required('Senha é obrigatória')
+      .min(
+        8,
+        'Senha deve ter no mínimo 8 caracteres, contendo minúsculo, maiúsculo, números e caracter especial'
+      ),
   });
 
   const handleSubmit = async (values: LoginDto) => {
     try {
       const unformattedCpf = values.cpf.replace(/[.-]/g, '');
-      const { token, status } = await AuthService.login({
-       ...values,
+      const { token: receivedToken, status } = await AuthService.login({
+        ...values,
         cpf: unformattedCpf,
       });
 
       if (status === 200) {
-        setToken(token);
+        setToken(receivedToken);
 
-        const user = await AuthService.getLoggedUser(token);
+        const user = await AuthService.getLoggedUser(receivedToken);
 
         setUser(user);
 
@@ -51,10 +60,7 @@ export const Login: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <h2 className="text-5xl font-bold mb-8">
-        Registro de Usuários
-      </h2>
-
+      <h2 className="text-5xl font-bold mb-8">Registro de Usuários</h2>
       <div className="flex justify-center items-center">
         <Formik
           initialValues={{ cpf: '', password: '' }}
@@ -79,7 +85,6 @@ export const Login: React.FC = () => {
                   onChange={(e) => {
                     setFieldValue('cpf', formatCPF(e.target.value));
                   }}
-
                 />
                 <ErrorMessage
                   name="cpf"
@@ -105,7 +110,7 @@ export const Login: React.FC = () => {
               </div>
               <button
                 type="submit"
-                className="bg- text-white p-2 rounded-md w-full bg-blue-400 cursor-pointer hover:bg-blue-600 transition-colors"
+                className="text-white p-2 rounded-md w-full bg-blue-400 cursor-pointer hover:bg-blue-600 transition-colors"
               >
                 Login
               </button>
