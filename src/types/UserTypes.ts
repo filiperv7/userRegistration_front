@@ -16,6 +16,7 @@ export type UserCreationDto = {
   cpf: string
   password: string
   email?: string
+  gender?: string
   placeOfBirth?: string
   nationality?: string
   idProfile: number
@@ -25,19 +26,10 @@ export type UserUpdateDto = {
   id: string
   cpf: string
   name: string
-  email: string
-  placeOfBirth?: string
-  nationality?: string
-}
-
-export type UserResponseDto = {
-  id: string
-  cpf: string
-  name: string
   email?: string
+  gender?: string
   placeOfBirth?: string
   nationality?: string
-  profile: ProfileDto
 }
 
 export type LoginDto = {
