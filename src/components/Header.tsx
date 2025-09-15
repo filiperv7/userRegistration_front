@@ -51,7 +51,7 @@ export const Header: React.FC = () => {
           </p>
           <button
             onClick={() => setIsLogoutModalOpen(true)}
-            className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+            className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors cursor-pointer"
           >
             Logout
           </button>
