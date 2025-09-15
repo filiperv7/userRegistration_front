@@ -26,7 +26,7 @@ class UserService {
   }
 
   async deleteUser(userId: string, token: string): Promise<void> {
-    await axios.delete(`${API_BASE_URL}/delete/${userId}`, {
+    await axios.delete(`${API_BASE_URL}/${userId}`, {
       headers: {
         Authorization: token
       }
