@@ -44,10 +44,8 @@ export const Header: React.FC = () => {
           </h2>
         </div>
         <div className="flex items-center gap-4">
-          <p className="flex flex-col items-end text-sm">
-            <span>
-              Bem-vindo(a), <span className="font-bold">{userName}</span>!
-            </span>
+          <p className="flex items-end text-sm">
+              Bem-vindo(a){userName && <span>,</span>}<span className="ml-1 font-bold">{userName}</span>
           </p>
           <button
             onClick={() => setIsLogoutModalOpen(true)}
