@@ -8,7 +8,7 @@ export type UserType = {
   gender?: string
   placeOfBirth?: string
   nationality?: string
-  idProfile: number
+  profile: ProfileDto
 }
 
 export type UserCreationDto = {
